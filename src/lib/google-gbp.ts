@@ -115,6 +115,28 @@ export async function listReviews(
   return data.reviews ?? [];
 }
 
+export async function postReply(
+  accessToken: string,
+  reviewName: string,
+  comment: string
+): Promise<void> {
+  const res = await fetch(
+    `https://mybusiness.googleapis.com/v4/${reviewName}/reply`,
+    {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ comment }),
+    }
+  );
+  if (!res.ok) {
+    const body = await res.text();
+    throw new Error(`GBP reply failed ${res.status}: ${body}`);
+  }
+}
+
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
 const STAR_MAP: Record<GbpReview["starRating"], number> = {

@@ -30,6 +30,7 @@ function formatDate(iso: string) {
 export function ReviewItem({ review: initial }: { review: Review }) {
   const [review, setReview] = useState(initial);
   const [generating, setGenerating] = useState(false);
+  const [approving, setApproving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   async function handleGenerate() {
@@ -48,6 +49,25 @@ export function ReviewItem({ review: initial }: { review: Review }) {
       setError(e instanceof Error ? e.message : "Noget gik galt");
     } finally {
       setGenerating(false);
+    }
+  }
+
+  async function handleApprove() {
+    setApproving(true);
+    setError(null);
+    try {
+      const res = await fetch("/api/reviews/approve", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ reviewId: review.id }),
+      });
+      const data = await res.json();
+      if (data.error) throw new Error(data.error);
+      setReview((r) => ({ ...r, status: "replied", repliedAt: new Date().toISOString() }));
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Noget gik galt");
+    } finally {
+      setApproving(false);
     }
   }
 
@@ -134,11 +154,24 @@ export function ReviewItem({ review: initial }: { review: Review }) {
             )}
             {review.status === "pending" && (
               <>
-                <Button size="sm">Godkend & send</Button>
+                <Button
+                  size="sm"
+                  disabled={approving}
+                  onClick={handleApprove}
+                >
+                  {approving ? (
+                    <>
+                      <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />
+                      Sender…
+                    </>
+                  ) : (
+                    "Godkend & send"
+                  )}
+                </Button>
                 <Button
                   size="sm"
                   variant="outline"
-                  disabled={generating}
+                  disabled={generating || approving}
                   onClick={handleGenerate}
                 >
                   {generating ? (

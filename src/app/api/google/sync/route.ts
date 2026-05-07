@@ -74,12 +74,10 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ synced: 0, businessId });
     }
 
-    // Build upsert rows. We key on (business_id, platform, external_review_id).
-    // Since the reviews table has no external_review_id column yet we use the
-    // review name (last segment) as reviewer_name dedup key — good enough for MVP.
     const rows = reviews.map((r) => ({
       business_id: businessId,
       platform: "google" as const,
+      google_review_name: r.name,
       reviewer_name: r.reviewer.displayName,
       reviewer_initials: initials(r.reviewer.displayName),
       rating: starRatingToNumber(r.starRating),
