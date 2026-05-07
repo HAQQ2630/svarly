@@ -6,6 +6,7 @@ import {
   starRatingToNumber,
   initials,
 } from "@/lib/google-gbp";
+import { sendNewReviewEmail } from "@/lib/email";
 
 // POST /api/google/sync
 // Body: { locationName: string; locationTitle: string; accountName: string }
@@ -93,6 +94,22 @@ export async function POST(request: NextRequest) {
     });
 
     if (insertErr) throw new Error(`Failed to save reviews: ${insertErr.message}`);
+
+    // Send email for reviews that are new (not already replied).
+    // Fire-and-forget — don't let email errors block the sync response.
+    if (user.email) {
+      const newReviews = rows.filter((r) => r.status === "new");
+      for (const r of newReviews) {
+        sendNewReviewEmail({
+          to: user.email,
+          businessName: body.locationTitle,
+          reviewerName: r.reviewer_name,
+          rating: r.rating,
+          content: r.content,
+          reviewsUrl: `${request.nextUrl.origin}/reviews`,
+        }).catch((e) => console.error("[email]", e));
+      }
+    }
 
     return NextResponse.json({ synced: rows.length, businessId });
   } catch (err) {

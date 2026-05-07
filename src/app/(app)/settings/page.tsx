@@ -19,23 +19,29 @@ async function getPageData() {
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (!user) return { googleConn: null, business: null };
+  if (!user) return { googleConn: null, business: null, subscription: null };
 
-  const [{ data: googleConn }, { data: business }] = await Promise.all([
-    supabase
-      .from("google_connections")
-      .select("google_email, updated_at")
-      .eq("user_id", user.id)
-      .maybeSingle(),
-    supabase
-      .from("businesses")
-      .select("id, name, google_location_name, signature, brand_voice")
-      .eq("owner_user_id", user.id)
-      .not("google_location_name", "is", null)
-      .maybeSingle(),
-  ]);
+  const [{ data: googleConn }, { data: business }, { data: subscription }] =
+    await Promise.all([
+      supabase
+        .from("google_connections")
+        .select("google_email, updated_at")
+        .eq("user_id", user.id)
+        .maybeSingle(),
+      supabase
+        .from("businesses")
+        .select("id, name, google_location_name, signature, brand_voice")
+        .eq("owner_user_id", user.id)
+        .not("google_location_name", "is", null)
+        .maybeSingle(),
+      supabase
+        .from("subscriptions")
+        .select("status, trial_end, current_period_end, stripe_customer_id")
+        .eq("user_id", user.id)
+        .maybeSingle(),
+    ]);
 
-  return { googleConn, business };
+  return { googleConn, business, subscription };
 }
 
 export default async function SettingsPage({
@@ -44,7 +50,7 @@ export default async function SettingsPage({
   searchParams: Promise<{ google_connected?: string; google_error?: string; synced?: string }>;
 }) {
   const params = await searchParams;
-  const { googleConn, business } = await getPageData();
+  const { googleConn, business, subscription } = await getPageData();
   const isGoogleConnected = !!googleConn;
   const hasLocation = !!business?.google_location_name;
 
@@ -181,6 +187,68 @@ export default async function SettingsPage({
               <Button size="sm" disabled>
                 Kommer snart
               </Button>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Abonnement</CardTitle>
+          <CardDescription>Administrer din fakturering og plan.</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium">
+                {subscription?.status === "active"
+                  ? "Starter — 149 DKK/måned"
+                  : subscription?.status === "trialing"
+                    ? "Gratis prøveperiode"
+                    : subscription
+                      ? "Ingen aktiv plan"
+                      : "Ingen aktiv plan"}
+              </p>
+              <p className="text-xs text-muted-foreground">
+                {subscription?.status === "trialing" && subscription.trial_end
+                  ? `Prøveperiode slutter ${new Date(subscription.trial_end).toLocaleDateString("da-DK", { day: "numeric", month: "long" })}`
+                  : subscription?.status === "active" && subscription.current_period_end
+                    ? `Næste fakturering ${new Date(subscription.current_period_end).toLocaleDateString("da-DK", { day: "numeric", month: "long" })}`
+                    : "Start din gratis prøveperiode i dag"}
+              </p>
+            </div>
+            <div className="flex items-center gap-3">
+              <Badge
+                variant="outline"
+                className={
+                  subscription?.status === "active"
+                    ? "border-emerald-200 bg-emerald-50 text-emerald-700"
+                    : subscription?.status === "trialing"
+                      ? "border-amber-200 bg-amber-50 text-amber-700"
+                      : "border-border text-muted-foreground"
+                }
+              >
+                {subscription?.status === "active"
+                  ? "Aktiv"
+                  : subscription?.status === "trialing"
+                    ? "Prøveperiode"
+                    : "Inaktiv"}
+              </Badge>
+              {subscription?.stripe_customer_id ? (
+                <Link
+                  href="/api/stripe/portal"
+                  className={buttonVariants({ size: "sm", variant: "outline" })}
+                >
+                  Administrer
+                </Link>
+              ) : (
+                <Link
+                  href="/api/stripe/checkout"
+                  className={buttonVariants({ size: "sm" })}
+                >
+                  Opgrader
+                </Link>
+              )}
             </div>
           </div>
         </CardContent>

@@ -102,7 +102,7 @@ export default function PriserPage() {
           </div>
 
           <Link
-            href="/login"
+            href={`/api/stripe/checkout?billing=${billing}`}
             className="block text-center w-full py-3 rounded-[12px] text-[15px] font-semibold text-white mb-3 transition-all hover:opacity-90"
             style={{ background: `linear-gradient(135deg,${PRIMARY},${PRIMARY}dd)`, boxShadow: `0 4px 18px ${PRIMARY}50` }}
           >
