@@ -10,8 +10,35 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
+import { buttonVariants } from "@/components/ui/button";
+import Link from "next/link";
+import { createClient } from "@/lib/supabase/server";
 
-export default function SettingsPage() {
+async function getGoogleConnection() {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return null;
+
+  const { data } = await supabase
+    .from("google_connections")
+    .select("google_email, updated_at")
+    .eq("user_id", user.id)
+    .maybeSingle();
+
+  return data;
+}
+
+export default async function SettingsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ google_connected?: string; google_error?: string }>;
+}) {
+  const params = await searchParams;
+  const googleConn = await getGoogleConnection();
+  const isGoogleConnected = !!googleConn;
+
   return (
     <div className="space-y-8">
       <div>
@@ -20,6 +47,17 @@ export default function SettingsPage() {
           Administrer din virksomhedsprofil, brand voice og forbundne platforme.
         </p>
       </div>
+
+      {params.google_connected && (
+        <div className="rounded-md border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
+          Google Business Profile er nu forbundet.
+        </div>
+      )}
+      {params.google_error && (
+        <div className="rounded-md border border-destructive/30 bg-destructive/10 px-4 py-3 text-sm text-destructive">
+          Google-forbindelsen mislykkedes: {params.google_error}
+        </div>
+      )}
 
       <Card>
         <CardHeader>
@@ -55,44 +93,64 @@ export default function SettingsPage() {
           </CardDescription>
         </CardHeader>
         <CardContent className="divide-y divide-border/60">
-          {[
-            { name: "Google Business Profile", status: "Forbundet" },
-            { name: "Yelp", status: "Forbundet" },
-            { name: "Facebook", status: "Ikke forbundet" },
-            { name: "TripAdvisor", status: "Forbundet" },
-          ].map((p) => (
-            <div
-              key={p.name}
-              className="flex items-center justify-between py-3 first:pt-0 last:pb-0"
-            >
-              <div>
-                <p className="text-sm font-medium">{p.name}</p>
-                <p className="text-xs text-muted-foreground">
-                  {p.status === "Forbundet"
-                    ? "Sidst synkroniseret for 2 minutter siden"
-                    : "Tilføj din konto for at hente anmeldelser"}
-                </p>
-              </div>
-              <div className="flex items-center gap-3">
-                <Badge
-                  variant="outline"
-                  className={
-                    p.status === "Forbundet"
-                      ? "border-emerald-200 bg-emerald-50 text-emerald-700"
-                      : "border-border text-muted-foreground"
-                  }
-                >
-                  {p.status}
-                </Badge>
-                <Button
-                  size="sm"
-                  variant={p.status === "Forbundet" ? "outline" : "default"}
-                >
-                  {p.status === "Forbundet" ? "Administrer" : "Tilslut"}
-                </Button>
-              </div>
+          {/* Google Business Profile — real connection status */}
+          <div className="flex items-center justify-between py-3 first:pt-0">
+            <div>
+              <p className="text-sm font-medium">Google Business Profile</p>
+              <p className="text-xs text-muted-foreground">
+                {isGoogleConnected
+                  ? googleConn.google_email
+                    ? `Forbundet som ${googleConn.google_email}`
+                    : "Forbundet"
+                  : "Tilføj din konto for at hente anmeldelser"}
+              </p>
             </div>
-          ))}
+            <div className="flex items-center gap-3">
+              <Badge
+                variant="outline"
+                className={
+                  isGoogleConnected
+                    ? "border-emerald-200 bg-emerald-50 text-emerald-700"
+                    : "border-border text-muted-foreground"
+                }
+              >
+                {isGoogleConnected ? "Forbundet" : "Ikke forbundet"}
+              </Badge>
+              {isGoogleConnected ? (
+                <Link
+                  href="/api/auth/google/start"
+                  className={buttonVariants({ size: "sm", variant: "outline" })}
+                >
+                  Genforbind
+                </Link>
+              ) : (
+                <Link
+                  href="/api/auth/google/start"
+                  className={buttonVariants({ size: "sm" })}
+                >
+                  Tilslut
+                </Link>
+              )}
+            </div>
+          </div>
+
+          {/* Trustpilot — coming soon */}
+          <div className="flex items-center justify-between py-3 last:pb-0">
+            <div>
+              <p className="text-sm font-medium">Trustpilot</p>
+              <p className="text-xs text-muted-foreground">
+                Tilføj din konto for at hente anmeldelser
+              </p>
+            </div>
+            <div className="flex items-center gap-3">
+              <Badge variant="outline" className="border-border text-muted-foreground">
+                Ikke forbundet
+              </Badge>
+              <Button size="sm" disabled>
+                Kommer snart
+              </Button>
+            </div>
+          </div>
         </CardContent>
       </Card>
 
