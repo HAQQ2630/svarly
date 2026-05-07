@@ -1,10 +1,13 @@
+"use client";
+
+import { useState } from "react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Stars } from "@/components/stars";
 import { StatusBadge } from "@/components/status-badge";
 import type { Review } from "@/types/review";
-import { Sparkles } from "lucide-react";
+import { Loader2, Sparkles } from "lucide-react";
 
 const PRIMARY = "#2F4F3E";
 
@@ -24,7 +27,30 @@ function formatDate(iso: string) {
   });
 }
 
-export function ReviewItem({ review }: { review: Review }) {
+export function ReviewItem({ review: initial }: { review: Review }) {
+  const [review, setReview] = useState(initial);
+  const [generating, setGenerating] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  async function handleGenerate() {
+    setGenerating(true);
+    setError(null);
+    try {
+      const res = await fetch("/api/reviews/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ reviewId: review.id }),
+      });
+      const data = await res.json();
+      if (data.error) throw new Error(data.error);
+      setReview((r) => ({ ...r, aiReply: data.aiReply, status: "pending" }));
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Noget gik galt");
+    } finally {
+      setGenerating(false);
+    }
+  }
+
   return (
     <Card className="p-5">
       <div className="flex items-start gap-4">
@@ -81,18 +107,45 @@ export function ReviewItem({ review }: { review: Review }) {
             </div>
           )}
 
+          {error && (
+            <p className="text-xs text-destructive">{error}</p>
+          )}
+
           <div className="flex items-center gap-2 pt-1">
             {review.status === "new" && (
-              <Button size="sm" className="gap-1.5">
-                <Sparkles className="h-3.5 w-3.5" />
-                Generer svar
+              <Button
+                size="sm"
+                className="gap-1.5"
+                disabled={generating}
+                onClick={handleGenerate}
+              >
+                {generating ? (
+                  <>
+                    <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                    Genererer…
+                  </>
+                ) : (
+                  <>
+                    <Sparkles className="h-3.5 w-3.5" />
+                    Generer svar
+                  </>
+                )}
               </Button>
             )}
             {review.status === "pending" && (
               <>
                 <Button size="sm">Godkend & send</Button>
-                <Button size="sm" variant="outline">
-                  Rediger
+                <Button
+                  size="sm"
+                  variant="outline"
+                  disabled={generating}
+                  onClick={handleGenerate}
+                >
+                  {generating ? (
+                    <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                  ) : (
+                    "Regenerer"
+                  )}
                 </Button>
               </>
             )}
