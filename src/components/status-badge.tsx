@@ -3,17 +3,21 @@ import type { ReviewStatus } from "@/types/review";
 import { cn } from "@/lib/utils";
 
 const styles: Record<ReviewStatus, string> = {
-  new: "border-sky-500/30 bg-sky-500/10 text-sky-300 hover:bg-sky-500/15",
-  pending:
-    "border-amber-500/30 bg-amber-500/10 text-amber-300 hover:bg-amber-500/15",
-  replied:
-    "border-emerald-500/30 bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/15",
+  new: "border-sky-200 bg-sky-50 text-sky-700",
+  pending: "border-amber-200 bg-amber-50 text-amber-700",
+  replied: "border-emerald-200 bg-emerald-50 text-emerald-700",
+};
+
+const dotStyles: Record<ReviewStatus, string> = {
+  new: "bg-sky-500",
+  pending: "bg-amber-500",
+  replied: "bg-emerald-500",
 };
 
 const labels: Record<ReviewStatus, string> = {
-  new: "New",
-  pending: "Pending",
-  replied: "Replied",
+  new: "Ny",
+  pending: "Afventer",
+  replied: "Besvaret",
 };
 
 export function StatusBadge({ status }: { status: ReviewStatus }) {
@@ -22,9 +26,7 @@ export function StatusBadge({ status }: { status: ReviewStatus }) {
       <span
         className={cn(
           "mr-1.5 h-1.5 w-1.5 rounded-full",
-          status === "new" && "bg-sky-400",
-          status === "pending" && "bg-amber-400",
-          status === "replied" && "bg-emerald-400",
+          dotStyles[status],
         )}
       />
       {labels[status]}

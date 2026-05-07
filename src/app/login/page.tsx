@@ -1,35 +1,55 @@
+import { Suspense } from "react";
 import Link from "next/link";
-import { Sparkles } from "lucide-react";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import Image from "next/image";
 import { SignInForm } from "@/components/sign-in-form";
 
 export default function LoginPage() {
   return (
-    <div className="relative flex min-h-screen items-center justify-center px-6 py-12">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(99,102,241,0.12),transparent_60%)]" />
+    <div className="relative flex min-h-screen items-center justify-center bg-[#F8F9F7] px-6 py-20">
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(47,79,62,0.10),transparent_65%)]" />
 
-      <div className="relative z-10 w-full max-w-sm">
-        <Link
-          href="/"
-          className="mb-8 flex items-center justify-center gap-2 text-lg font-semibold tracking-tight"
-        >
-          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-500/15 text-indigo-400 ring-1 ring-indigo-500/30">
-            <Sparkles className="h-4 w-4" />
+      <div className="relative z-10 w-full max-w-[400px]">
+        <Link href="/" className="mb-8 flex flex-col items-center gap-3">
+          <span className="flex h-[50px] w-[50px] items-center justify-center overflow-hidden rounded-[15px]">
+            <Image
+              src="/logo.png"
+              alt="Svarly"
+              width={1158}
+              height={1154}
+              priority
+              className="h-full w-full object-cover mix-blend-multiply"
+            />
           </span>
-          Svarly
+          <span className="text-[18px] font-semibold tracking-[-0.3px] text-[#1F2A24]">
+            Svarly
+          </span>
         </Link>
 
-        <Card>
-          <CardHeader className="space-y-1">
-            <h1 className="text-xl font-semibold">Welcome back</h1>
-            <p className="text-sm text-muted-foreground">
-              Sign in to manage your replies.
-            </p>
-          </CardHeader>
-          <CardContent>
+        <div
+          className="rounded-[18px] border border-[#E0DDD5] bg-white px-8 py-9"
+          style={{ boxShadow: "0 4px 32px rgba(0,0,0,0.08)" }}
+        >
+          <h1 className="mb-1.5 text-center text-[22px] font-semibold tracking-[-0.4px] text-[#1F2A24]">
+            Velkommen tilbage
+          </h1>
+          <p className="mb-7 text-center text-[14px] text-[#5C6B62]">
+            Log ind for at administrere dine anmeldelser
+          </p>
+
+          <Suspense fallback={null}>
             <SignInForm />
-          </CardContent>
-        </Card>
+          </Suspense>
+        </div>
+
+        <p className="mt-5 text-center text-[13px] text-[#5C6B62]">
+          Har du ikke en konto?{" "}
+          <Link
+            href="/priser"
+            className="font-medium text-[#2F4F3E] hover:underline"
+          >
+            Opret gratis
+          </Link>
+        </p>
       </div>
     </div>
   );

@@ -15,33 +15,33 @@ export default function SettingsPage() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-2xl font-semibold tracking-tight">Settings</h1>
+        <h1 className="text-2xl font-semibold tracking-tight">Indstillinger</h1>
         <p className="mt-1 text-sm text-muted-foreground">
-          Manage your business profile, voice and connected platforms.
+          Administrer din virksomhedsprofil, brand voice og forbundne platforme.
         </p>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle>Business profile</CardTitle>
+          <CardTitle>Virksomhedsprofil</CardTitle>
           <CardDescription>
-            Shown in AI-generated replies and on reports.
+            Vises i AI-genererede svar og i rapporter.
           </CardDescription>
         </CardHeader>
         <CardContent className="grid gap-5 md:grid-cols-2">
           <div className="space-y-2">
-            <Label htmlFor="business-name">Business name</Label>
+            <Label htmlFor="business-name">Virksomhedsnavn</Label>
             <Input id="business-name" defaultValue="Café Bella" />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="reply-signature">Reply signature</Label>
-            <Input id="reply-signature" defaultValue="— Elena, owner" />
+            <Label htmlFor="reply-signature">Svar-signatur</Label>
+            <Input id="reply-signature" defaultValue="— Elena, ejer" />
           </div>
           <div className="space-y-2 md:col-span-2">
             <Label htmlFor="voice">Brand voice</Label>
             <Input
               id="voice"
-              defaultValue="Warm, specific, never corporate. Short sentences."
+              defaultValue="Varm, konkret, aldrig corporate. Korte sætninger."
             />
           </div>
         </CardContent>
@@ -49,17 +49,17 @@ export default function SettingsPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Connected platforms</CardTitle>
+          <CardTitle>Forbundne platforme</CardTitle>
           <CardDescription>
-            Review sources Svarly will pull from.
+            Anmeldelseskilder Svarly henter fra.
           </CardDescription>
         </CardHeader>
         <CardContent className="divide-y divide-border/60">
           {[
-            { name: "Google Business Profile", status: "Connected" },
-            { name: "Yelp", status: "Connected" },
-            { name: "Facebook", status: "Not connected" },
-            { name: "TripAdvisor", status: "Connected" },
+            { name: "Google Business Profile", status: "Forbundet" },
+            { name: "Yelp", status: "Forbundet" },
+            { name: "Facebook", status: "Ikke forbundet" },
+            { name: "TripAdvisor", status: "Forbundet" },
           ].map((p) => (
             <div
               key={p.name}
@@ -68,17 +68,17 @@ export default function SettingsPage() {
               <div>
                 <p className="text-sm font-medium">{p.name}</p>
                 <p className="text-xs text-muted-foreground">
-                  {p.status === "Connected"
-                    ? "Last synced 2 minutes ago"
-                    : "Link your account to pull reviews"}
+                  {p.status === "Forbundet"
+                    ? "Sidst synkroniseret for 2 minutter siden"
+                    : "Tilføj din konto for at hente anmeldelser"}
                 </p>
               </div>
               <div className="flex items-center gap-3">
                 <Badge
                   variant="outline"
                   className={
-                    p.status === "Connected"
-                      ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-300"
+                    p.status === "Forbundet"
+                      ? "border-emerald-200 bg-emerald-50 text-emerald-700"
                       : "border-border text-muted-foreground"
                   }
                 >
@@ -86,9 +86,9 @@ export default function SettingsPage() {
                 </Badge>
                 <Button
                   size="sm"
-                  variant={p.status === "Connected" ? "outline" : "default"}
+                  variant={p.status === "Forbundet" ? "outline" : "default"}
                 >
-                  {p.status === "Connected" ? "Manage" : "Connect"}
+                  {p.status === "Forbundet" ? "Administrer" : "Tilslut"}
                 </Button>
               </div>
             </div>
@@ -98,33 +98,33 @@ export default function SettingsPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Danger zone</CardTitle>
-          <CardDescription>Permanent account actions.</CardDescription>
+          <CardTitle>Farezone</CardTitle>
+          <CardDescription>Permanente handlinger på kontoen.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium">Sign out</p>
+              <p className="text-sm font-medium">Log ud</p>
               <p className="text-xs text-muted-foreground">
-                End your session on this device.
+                Afslut din session på denne enhed.
               </p>
             </div>
             <Button variant="outline" size="sm">
-              Sign out
+              Log ud
             </Button>
           </div>
           <Separator />
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-destructive">
-                Delete workspace
+                Slet workspace
               </p>
               <p className="text-xs text-muted-foreground">
-                This removes all reviews and replies. Cannot be undone.
+                Dette fjerner alle anmeldelser og svar. Kan ikke fortrydes.
               </p>
             </div>
             <Button variant="destructive" size="sm">
-              Delete
+              Slet
             </Button>
           </div>
         </CardContent>

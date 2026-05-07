@@ -6,54 +6,55 @@ import {
 } from "@/components/ui/card";
 import { ReviewItem } from "@/components/review-item";
 import { Stars } from "@/components/stars";
-import { getReviewStats, mockReviews } from "@/lib/mock-data";
+import { getReviewStats, getReviews } from "@/lib/queries";
 import {
   MessageSquareText,
   Sparkles,
   CheckCheck,
   Star,
 } from "lucide-react";
+import Link from "next/link";
 
-export default function DashboardPage() {
-  const stats = getReviewStats();
-  const recent = [...mockReviews]
-    .sort((a, b) => b.date.localeCompare(a.date))
-    .slice(0, 3);
+const PRIMARY = "#2F4F3E";
+
+export default async function DashboardPage() {
+  const [stats, reviews] = await Promise.all([getReviewStats(), getReviews()]);
+  const recent = reviews.slice(0, 3);
 
   const cards = [
     {
-      label: "Total reviews",
+      label: "Anmeldelser i alt",
       value: stats.total.toString(),
       icon: MessageSquareText,
-      hint: "Across all platforms",
+      hint: "På tværs af platforme",
     },
     {
-      label: "Average rating",
+      label: "Gennemsnit",
       value: stats.avgRating.toFixed(1),
       icon: Star,
-      hint: `${stats.total} reviews`,
+      hint: `${stats.total} anmeldelser`,
       custom: <Stars rating={Math.round(stats.avgRating)} className="mt-2" />,
     },
     {
-      label: "Awaiting reply",
+      label: "Afventer svar",
       value: (stats.newCount + stats.pendingCount).toString(),
       icon: Sparkles,
-      hint: `${stats.newCount} new, ${stats.pendingCount} drafted`,
+      hint: `${stats.newCount} nye, ${stats.pendingCount} udkast`,
     },
     {
-      label: "Replied",
+      label: "Besvaret",
       value: stats.repliedCount.toString(),
       icon: CheckCheck,
-      hint: "This month",
+      hint: "Denne måned",
     },
   ];
 
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-2xl font-semibold tracking-tight">Dashboard</h1>
+        <h1 className="text-2xl font-semibold tracking-tight">Oversigt</h1>
         <p className="mt-1 text-sm text-muted-foreground">
-          A snapshot of your reviews across every platform.
+          Et overblik over dine anmeldelser på tværs af platforme.
         </p>
       </div>
 
@@ -81,19 +82,27 @@ export default function DashboardPage() {
       <div>
         <div className="mb-4 flex items-end justify-between">
           <h2 className="text-lg font-semibold tracking-tight">
-            Recent activity
+            Seneste aktivitet
           </h2>
-          <a
+          <Link
             href="/reviews"
-            className="text-sm text-indigo-400 hover:underline"
+            className="text-sm font-medium hover:underline"
+            style={{ color: PRIMARY }}
           >
-            View all →
-          </a>
+            Vis alle →
+          </Link>
         </div>
         <div className="space-y-3">
-          {recent.map((r) => (
-            <ReviewItem key={r.id} review={r} />
-          ))}
+          {recent.length === 0 ? (
+            <Card className="p-10 text-center">
+              <p className="text-sm font-medium">Ingen anmeldelser endnu.</p>
+              <p className="mt-1 text-xs text-muted-foreground">
+                Når dine kunder begynder at anmelde, dukker de op her.
+              </p>
+            </Card>
+          ) : (
+            recent.map((r) => <ReviewItem key={r.id} review={r} />)
+          )}
         </div>
       </div>
     </div>

@@ -1,17 +1,31 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Eye, EyeOff } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
+import { GoogleLogo } from "@/components/landing/icons";
+
+const PRIMARY = "#2F4F3E";
+const BORDER = "#E0DDD5";
+const MUTED = "#5C6B62";
+
+function safeRedirect(value: string | null): string {
+  if (!value) return "/dashboard";
+  if (!value.startsWith("/") || value.startsWith("//") || value.startsWith("/\\")) {
+    return "/dashboard";
+  }
+  return value;
+}
 
 export function SignInForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectTo = safeRedirect(searchParams.get("redirectedFrom"));
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [remember, setRemember] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -21,69 +35,150 @@ export function SignInForm() {
     setLoading(true);
     try {
       const supabase = createClient();
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) {
         setError(error.message);
         return;
       }
-      router.push("/dashboard");
+      router.push(redirectTo);
       router.refresh();
     } catch (err) {
       setError(
         err instanceof Error
           ? err.message
-          : "Couldn't reach Supabase. Check NEXT_PUBLIC_SUPABASE_URL.",
+          : "Kunne ikke kontakte Supabase. Tjek NEXT_PUBLIC_SUPABASE_URL.",
       );
     } finally {
       setLoading(false);
     }
   }
 
+  async function handleGoogle() {
+    setError(null);
+    setLoading(true);
+    try {
+      const supabase = createClient();
+      const next = encodeURIComponent(redirectTo);
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback?next=${next}`,
+        },
+      });
+      if (error) {
+        setError(error.message);
+        setLoading(false);
+      }
+      // On success, Supabase redirects the browser; no further work here.
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : "Kunne ikke starte Google-login.",
+      );
+      setLoading(false);
+    }
+  }
+
+  const inputBase =
+    "w-full h-[42px] rounded-[10px] bg-[#FAFAF8] px-[13px] text-[14px] text-[#1F2A24] outline-none transition-colors focus:border-[#2F4F3E]";
+
   return (
-    <form onSubmit={onSubmit} className="space-y-4">
-      <div className="space-y-2">
-        <Label htmlFor="email">Email</Label>
-        <Input
-          id="email"
-          type="email"
-          autoComplete="email"
-          required
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="you@business.com"
-        />
+    <>
+      <form onSubmit={onSubmit} className="space-y-3.5">
+        <div>
+          <label htmlFor="email" className="mb-1.5 block text-[12.5px] font-medium text-[#1F2A24]">
+            E-mail
+          </label>
+          <input
+            id="email"
+            type="email"
+            autoComplete="email"
+            required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="dig@email.dk"
+            className={inputBase}
+            style={{ border: `1px solid ${BORDER}` }}
+          />
+        </div>
+
+        <div>
+          <label htmlFor="password" className="mb-1.5 block text-[12.5px] font-medium text-[#1F2A24]">
+            Adgangskode
+          </label>
+          <div className="relative">
+            <input
+              id="password"
+              type={showPassword ? "text" : "password"}
+              autoComplete="current-password"
+              required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="••••••••"
+              className={`${inputBase} pr-10`}
+              style={{ border: `1px solid ${BORDER}` }}
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword((s) => !s)}
+              aria-label={showPassword ? "Skjul adgangskode" : "Vis adgangskode"}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-[#5C6B62] hover:text-[#1F2A24]"
+            >
+              {showPassword ? <EyeOff size={15} /> : <Eye size={15} />}
+            </button>
+          </div>
+        </div>
+
+        <div className="flex items-center justify-between pt-1">
+          <label className="flex cursor-pointer items-center gap-1.5 text-[12.5px] text-[#5C6B62]">
+            <input
+              type="checkbox"
+              checked={remember}
+              onChange={(e) => setRemember(e.target.checked)}
+              className="h-3.5 w-3.5"
+              style={{ accentColor: PRIMARY }}
+            />
+            Husk mig
+          </label>
+          <a href="#" className="text-[12.5px] font-medium text-[#2F4F3E] hover:underline">
+            Glemt adgangskode?
+          </a>
+        </div>
+
+        {error && (
+          <p className="rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive">
+            {error}
+          </p>
+        )}
+
+        <button
+          type="submit"
+          disabled={loading}
+          className="h-11 w-full rounded-[11px] text-[14.5px] font-semibold text-white transition-opacity disabled:opacity-75"
+          style={{
+            background: `linear-gradient(135deg, ${PRIMARY}, ${PRIMARY}dd)`,
+            boxShadow: `0 3px 14px ${PRIMARY}45`,
+          }}
+        >
+          {loading ? "Logger ind…" : "Log ind"}
+        </button>
+      </form>
+
+      <div className="my-4 flex items-center gap-2.5">
+        <div className="h-px flex-1" style={{ background: BORDER }} />
+        <span className="text-[12px]" style={{ color: MUTED }}>eller</span>
+        <div className="h-px flex-1" style={{ background: BORDER }} />
       </div>
-      <div className="space-y-2">
-        <Label htmlFor="password">Password</Label>
-        <Input
-          id="password"
-          type="password"
-          autoComplete="current-password"
-          required
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-      </div>
 
-      {error && (
-        <p className="rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive">
-          {error}
-        </p>
-      )}
-
-      <Button type="submit" className="w-full" disabled={loading}>
-        {loading ? "Signing in…" : "Sign in"}
-      </Button>
-
-      <p className="text-center text-xs text-muted-foreground">
-        No account yet?{" "}
-        <Link href="/dashboard" className="text-indigo-400 hover:underline">
-          Explore the demo dashboard
-        </Link>
-      </p>
-    </form>
+      <button
+        type="button"
+        onClick={handleGoogle}
+        disabled={loading}
+        className="flex h-[42px] w-full items-center justify-center gap-2.5 rounded-[10px] bg-white text-[14px] font-medium text-[#1F2A24] transition-colors hover:bg-[#FAFAF8] disabled:opacity-60"
+        style={{ border: `1.5px solid ${BORDER}` }}
+      >
+        <GoogleLogo />
+        Log ind med Google
+      </button>
+    </>
   );
 }

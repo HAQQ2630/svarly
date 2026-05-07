@@ -6,17 +6,20 @@ import { StatusBadge } from "@/components/status-badge";
 import type { Review } from "@/types/review";
 import { Sparkles } from "lucide-react";
 
+const PRIMARY = "#2F4F3E";
+
 const platformLabel: Record<Review["platform"], string> = {
   google: "Google",
   yelp: "Yelp",
   facebook: "Facebook",
   tripadvisor: "TripAdvisor",
+  trustpilot: "Trustpilot",
 };
 
 function formatDate(iso: string) {
-  return new Date(iso).toLocaleDateString(undefined, {
-    month: "short",
+  return new Date(iso).toLocaleDateString("da-DK", {
     day: "numeric",
+    month: "short",
     year: "numeric",
   });
 }
@@ -26,8 +29,11 @@ export function ReviewItem({ review }: { review: Review }) {
     <Card className="p-5">
       <div className="flex items-start gap-4">
         <Avatar className="h-10 w-10">
-          <AvatarFallback className="bg-indigo-500/15 text-sm text-indigo-300">
-            {review.reviewerInitials}
+          <AvatarFallback
+            className="text-sm font-semibold"
+            style={{ background: PRIMARY + "1A", color: PRIMARY }}
+          >
+            {review.reviewerInitials ?? review.reviewerName.slice(0, 2).toUpperCase()}
           </AvatarFallback>
         </Avatar>
 
@@ -43,7 +49,7 @@ export function ReviewItem({ review }: { review: Review }) {
               <div className="mt-1 flex items-center gap-2">
                 <Stars rating={review.rating} />
                 <span className="text-xs text-muted-foreground">
-                  {formatDate(review.date)}
+                  {formatDate(review.postedAt)}
                 </span>
               </div>
             </div>
@@ -55,10 +61,19 @@ export function ReviewItem({ review }: { review: Review }) {
           </p>
 
           {review.aiReply && (
-            <div className="rounded-md border border-indigo-500/20 bg-indigo-500/5 p-3">
-              <div className="mb-1.5 flex items-center gap-1.5 text-xs font-medium text-indigo-300">
+            <div
+              className="rounded-md p-3"
+              style={{
+                background: PRIMARY + "0D",
+                border: `1px solid ${PRIMARY}26`,
+              }}
+            >
+              <div
+                className="mb-1.5 flex items-center gap-1.5 text-xs font-semibold"
+                style={{ color: PRIMARY }}
+              >
                 <Sparkles className="h-3 w-3" />
-                {review.status === "replied" ? "Reply sent" : "Suggested reply"}
+                {review.status === "replied" ? "Svar sendt" : "Forslag til svar"}
               </div>
               <p className="text-sm leading-relaxed text-foreground/85">
                 {review.aiReply}
@@ -70,20 +85,20 @@ export function ReviewItem({ review }: { review: Review }) {
             {review.status === "new" && (
               <Button size="sm" className="gap-1.5">
                 <Sparkles className="h-3.5 w-3.5" />
-                Generate reply
+                Generer svar
               </Button>
             )}
             {review.status === "pending" && (
               <>
-                <Button size="sm">Approve & send</Button>
+                <Button size="sm">Godkend & send</Button>
                 <Button size="sm" variant="outline">
-                  Edit
+                  Rediger
                 </Button>
               </>
             )}
             {review.status === "replied" && (
               <Button size="sm" variant="outline">
-                View on {platformLabel[review.platform]}
+                Vis på {platformLabel[review.platform]}
               </Button>
             )}
           </div>
