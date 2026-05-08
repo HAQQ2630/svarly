@@ -226,13 +226,7 @@ export default async function SettingsPage({
               </div>
             </div>
 
-            {isGoogleConnected && !hasLocation && (
-              <GoogleLocationPicker
-                onSynced={(count) => {
-                  window.location.href = `/settings?synced=${count}`;
-                }}
-              />
-            )}
+            {isGoogleConnected && !hasLocation && <GoogleLocationPicker />}
           </div>
 
           {/* Trustpilot — coming soon */}

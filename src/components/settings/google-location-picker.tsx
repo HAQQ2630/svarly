@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 
@@ -10,11 +11,8 @@ interface Location {
   accountName: string;
 }
 
-interface Props {
-  onSynced: (count: number) => void;
-}
-
-export function GoogleLocationPicker({ onSynced }: Props) {
+export function GoogleLocationPicker() {
+  const router = useRouter();
   const [locations, setLocations] = useState<Location[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -46,7 +44,8 @@ export function GoogleLocationPicker({ onSynced }: Props) {
       });
       const data = await res.json();
       if (data.error) throw new Error(data.error);
-      onSynced(data.synced);
+      router.replace(`/settings?synced=${data.synced}`);
+      router.refresh();
     } catch (e) {
       setError(e instanceof Error ? e.message : "Sync failed");
     } finally {
