@@ -80,13 +80,13 @@ export function SignInForm() {
   }
 
   const inputBase =
-    "w-full h-[42px] rounded-[10px] bg-[#FAFAF8] px-[13px] text-[14px] text-[#1F2A24] outline-none transition-colors focus:border-[#2F4F3E]";
+    "w-full h-[42px] rounded-[10px] border border-[#E0DDD5] bg-[#F8F9F7] px-[13px] text-[16px] text-[#1F2A24] outline-none transition-colors focus:border-[#2F4F3E]";
 
   return (
     <>
       <form onSubmit={onSubmit} className="space-y-3.5">
         <div>
-          <label htmlFor="email" className="mb-1.5 block text-[12.5px] font-medium text-[#1F2A24]">
+          <label htmlFor="email" className="mb-1.5 block text-[13.5px] font-medium text-[#1F2A24]">
             E-mail
           </label>
           <input
@@ -98,12 +98,11 @@ export function SignInForm() {
             onChange={(e) => setEmail(e.target.value)}
             placeholder="dig@email.dk"
             className={inputBase}
-            style={{ border: `1px solid ${BORDER}` }}
           />
         </div>
 
         <div>
-          <label htmlFor="password" className="mb-1.5 block text-[12.5px] font-medium text-[#1F2A24]">
+          <label htmlFor="password" className="mb-1.5 block text-[13.5px] font-medium text-[#1F2A24]">
             Adgangskode
           </label>
           <div className="relative">
@@ -116,7 +115,6 @@ export function SignInForm() {
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••"
               className={`${inputBase} pr-10`}
-              style={{ border: `1px solid ${BORDER}` }}
             />
             <button
               type="button"
@@ -130,7 +128,7 @@ export function SignInForm() {
         </div>
 
         <div className="flex items-center justify-between pt-1">
-          <label className="flex cursor-pointer items-center gap-1.5 text-[12.5px] text-[#5C6B62]">
+          <label className="flex cursor-pointer items-center gap-1.5 text-[13.5px] text-[#5C6B62]">
             <input
               type="checkbox"
               checked={remember}
@@ -140,7 +138,7 @@ export function SignInForm() {
             />
             Husk mig
           </label>
-          <Link href="/forgot-password" className="text-[12.5px] font-medium text-[#2F4F3E] hover:underline">
+          <Link href="/forgot-password" className="text-[13.5px] font-medium text-[#2F4F3E] hover:underline">
             Glemt adgangskode?
           </Link>
         </div>
@@ -154,11 +152,7 @@ export function SignInForm() {
         <button
           type="submit"
           disabled={loading}
-          className="h-11 w-full rounded-[11px] text-[14.5px] font-semibold text-white transition-opacity disabled:opacity-75"
-          style={{
-            background: `linear-gradient(135deg, ${PRIMARY}, ${PRIMARY}dd)`,
-            boxShadow: `0 3px 14px ${PRIMARY}45`,
-          }}
+          className="h-11 w-full rounded-[11px] bg-primary text-[14.5px] font-medium text-primary-foreground shadow-[0_2px_12px_rgba(47,79,62,0.35)] transition-all hover:bg-[#25402F] hover:shadow-[0_4px_18px_rgba(47,79,62,0.18)] disabled:pointer-events-none disabled:opacity-60"
         >
           {loading ? "Logger ind…" : "Log ind"}
         </button>
@@ -174,8 +168,7 @@ export function SignInForm() {
         type="button"
         onClick={handleGoogle}
         disabled={loading}
-        className="flex h-[42px] w-full items-center justify-center gap-2.5 rounded-[10px] bg-white text-[14px] font-medium text-[#1F2A24] transition-colors hover:bg-[#FAFAF8] disabled:opacity-60"
-        style={{ border: `1.5px solid ${BORDER}` }}
+        className="flex h-[42px] w-full items-center justify-center gap-2.5 rounded-[10px] border border-[#E0DDD5] bg-[#F8F9F7] text-[14px] font-medium text-[#1F2A24] transition-colors hover:bg-[#EFE9DF] disabled:opacity-60"
       >
         <GoogleLogo />
         Log ind med Google

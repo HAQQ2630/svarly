@@ -6,7 +6,6 @@ import { Eye, EyeOff } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { GoogleLogo } from "@/components/landing/icons";
 
-const PRIMARY = "#2F4F3E";
 const BORDER = "#E0DDD5";
 const MUTED = "#5C6B62";
 
@@ -65,11 +64,11 @@ export function SignUpForm() {
   }
 
   const inputBase =
-    "w-full h-[42px] rounded-[10px] bg-[#FAFAF8] px-[13px] text-[14px] text-[#1F2A24] outline-none transition-colors focus:border-[#2F4F3E]";
+    "w-full h-[42px] rounded-[10px] border border-[#E0DDD5] bg-[#F8F9F7] px-[13px] text-[16px] text-[#1F2A24] outline-none transition-colors focus:border-[#2F4F3E]";
 
   if (checkEmail) {
     return (
-      <div className="rounded-[12px] border border-emerald-200 bg-emerald-50 px-5 py-6 text-center">
+      <div className="rounded-[12px] border border-[rgba(47,79,62,0.20)] bg-[rgba(47,79,62,0.06)] px-5 py-6 text-center">
         <div className="text-2xl mb-3">📬</div>
         <p className="text-[14px] font-semibold text-[#1F2A24] mb-1">Tjek din e-mail</p>
         <p className="text-[13px]" style={{ color: MUTED }}>
@@ -83,7 +82,7 @@ export function SignUpForm() {
     <>
       <form onSubmit={onSubmit} className="space-y-3.5">
         <div>
-          <label htmlFor="email" className="mb-1.5 block text-[12.5px] font-medium text-[#1F2A24]">
+          <label htmlFor="email" className="mb-1.5 block text-[13.5px] font-medium text-[#1F2A24]">
             E-mail
           </label>
           <input
@@ -95,12 +94,11 @@ export function SignUpForm() {
             onChange={(e) => setEmail(e.target.value)}
             placeholder="dig@email.dk"
             className={inputBase}
-            style={{ border: `1px solid ${BORDER}` }}
           />
         </div>
 
         <div>
-          <label htmlFor="password" className="mb-1.5 block text-[12.5px] font-medium text-[#1F2A24]">
+          <label htmlFor="password" className="mb-1.5 block text-[13.5px] font-medium text-[#1F2A24]">
             Adgangskode
           </label>
           <div className="relative">
@@ -114,7 +112,6 @@ export function SignUpForm() {
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Mindst 6 tegn"
               className={`${inputBase} pr-10`}
-              style={{ border: `1px solid ${BORDER}` }}
             />
             <button
               type="button"
@@ -136,11 +133,7 @@ export function SignUpForm() {
         <button
           type="submit"
           disabled={loading}
-          className="h-11 w-full rounded-[11px] text-[14.5px] font-semibold text-white transition-opacity disabled:opacity-75"
-          style={{
-            background: `linear-gradient(135deg, ${PRIMARY}, ${PRIMARY}dd)`,
-            boxShadow: `0 3px 14px ${PRIMARY}45`,
-          }}
+          className="h-11 w-full rounded-[11px] bg-primary text-[14.5px] font-medium text-primary-foreground shadow-[0_2px_12px_rgba(47,79,62,0.35)] transition-all hover:bg-[#25402F] hover:shadow-[0_4px_18px_rgba(47,79,62,0.18)] disabled:pointer-events-none disabled:opacity-60"
         >
           {loading ? "Opretter konto…" : "Opret konto gratis"}
         </button>
@@ -156,8 +149,7 @@ export function SignUpForm() {
         type="button"
         onClick={handleGoogle}
         disabled={loading}
-        className="flex h-[42px] w-full items-center justify-center gap-2.5 rounded-[10px] bg-white text-[14px] font-medium text-[#1F2A24] transition-colors hover:bg-[#FAFAF8] disabled:opacity-60"
-        style={{ border: `1.5px solid ${BORDER}` }}
+        className="flex h-[42px] w-full items-center justify-center gap-2.5 rounded-[10px] border border-[#E0DDD5] bg-[#F8F9F7] text-[14px] font-medium text-[#1F2A24] transition-colors hover:bg-[#EFE9DF] disabled:opacity-60"
       >
         <GoogleLogo />
         Opret med Google

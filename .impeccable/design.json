@@ -1,0 +1,225 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-05-08T00:00:00Z",
+  "title": "Design System: Svarly",
+  "extensions": {
+    "colorMeta": {
+      "forest-deep": {
+        "role": "primary",
+        "displayName": "Deep Forest",
+        "canonical": "oklch(0.36 0.04 155)",
+        "tonalRamp": ["#0E1612", "#192921", "#243B30", "#2F4F3E", "#436957", "#638774", "#94AC9E", "#D5E0D7"]
+      },
+      "forest-deep-hover": {
+        "role": "primary",
+        "displayName": "Deep Forest (hover)",
+        "canonical": "oklch(0.30 0.04 155)",
+        "tonalRamp": ["#0A0E0B", "#141C16", "#1B2A21", "#25402F", "#39594A", "#577C66", "#849F8E", "#D0DAD3"]
+      },
+      "sage": {
+        "role": "secondary",
+        "displayName": "Sage",
+        "canonical": "oklch(0.59 0.025 142)",
+        "tonalRamp": ["#1F2A22", "#2F4039", "#465850", "#5C7066", "#7A8F7B", "#9CAF9F", "#C0CCC2", "#E5EAE6"]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "canonical": "oklch(0.18 0.01 155)",
+        "tonalRamp": ["#0A0F0C", "#121916", "#1F2A24", "#2F4036", "#46594D", "#647365", "#909C92", "#D5DCD7"]
+      },
+      "bark": {
+        "role": "neutral",
+        "displayName": "Bark (supporting text)",
+        "canonical": "oklch(0.45 0.012 155)",
+        "tonalRamp": ["#1A201C", "#28302B", "#3A453E", "#4D5A53", "#5C6B62", "#7E8B83", "#A8B1AB", "#DCDFDD"]
+      },
+      "linen": {
+        "role": "neutral",
+        "displayName": "Linen (page background)",
+        "canonical": "oklch(0.978 0.003 110)",
+        "tonalRamp": ["#1F221E", "#2D312D", "#454945", "#646964", "#8C918D", "#B4B8B5", "#DBDDDB", "#F8F9F7"]
+      },
+      "beige-card": {
+        "role": "neutral",
+        "displayName": "Beige Card",
+        "canonical": "oklch(0.93 0.008 80)",
+        "tonalRamp": ["#221F1A", "#322F29", "#4A4640", "#6A6660", "#928E86", "#B9B5AD", "#DAD7D0", "#EFEDE7"]
+      },
+      "chalk-border": {
+        "role": "neutral",
+        "displayName": "Chalk Border",
+        "canonical": "oklch(0.89 0.006 80)",
+        "tonalRamp": ["#211F1B", "#312E29", "#494640", "#69655F", "#918D86", "#B7B3AC", "#D0CCC4", "#E0DDD5"]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Hero headlines on landing surfaces. One per page maximum. Italic permitted for a single emphasized clause."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Section titles on long marketing pages."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Card titles, dialog headers, sub-section titles in product UI."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Default body across marketing and product. 65 to 75ch line length on long-form."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Nav links, button copy, small UI labels. Never used for body content."
+      }
+    },
+    "shadows": [
+      {
+        "name": "primary-glow",
+        "value": "0 2px 12px rgba(47,79,62,0.35)",
+        "purpose": "Under the primary CTA at rest. Soft, warm, present but not loud."
+      },
+      {
+        "name": "hover-lift",
+        "value": "0 4px 18px rgba(47,79,62,0.18)",
+        "purpose": "Hover state on primary CTAs and high-emphasis links. Larger blur, lower opacity."
+      },
+      {
+        "name": "focus-ring",
+        "value": "outline: 2px solid #2F4F3E; outline-offset: 2px",
+        "purpose": "Keyboard focus. Used in place of a shadow for accessibility."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-out-quart",
+        "value": "cubic-bezier(0.165, 0.84, 0.44, 1)",
+        "purpose": "Default easing for state transitions and entrances. Exponential ease-out, never bounce."
+      },
+      {
+        "name": "fade-up",
+        "value": "fadeUp 0.7s cubic-bezier(0.165, 0.84, 0.44, 1) both",
+        "purpose": "Hero entrance, staggered with 0.1s offsets per element. Respects prefers-reduced-motion."
+      },
+      {
+        "name": "duration-fast",
+        "value": "150ms",
+        "purpose": "Hover and color-state transitions on controls."
+      },
+      {
+        "name": "duration-medium",
+        "value": "300ms",
+        "purpose": "Nav scroll-state transition; backdrop-filter onset."
+      }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "md", "value": "768px" },
+      { "name": "lg", "value": "1024px" },
+      { "name": "content-max", "value": "1100px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The single primary CTA. Deep Forest fill, soft warm glow at rest, deepens on hover.",
+      "html": "<button class=\"ds-btn-primary\">Start gratis</button>",
+      "css": ".ds-btn-primary { background: #2F4F3E; color: #F8F9F7; font-family: 'DM Sans', system-ui, sans-serif; font-size: 13.5px; font-weight: 500; letter-spacing: normal; padding: 9px 20px; border: 1px solid transparent; border-radius: 10px; box-shadow: 0 2px 12px rgba(47,79,62,0.35); cursor: pointer; transition: background 150ms cubic-bezier(0.165,0.84,0.44,1), box-shadow 150ms cubic-bezier(0.165,0.84,0.44,1), transform 100ms ease-out; } .ds-btn-primary:hover { background: #25402F; box-shadow: 0 4px 18px rgba(47,79,62,0.18); } .ds-btn-primary:focus-visible { outline: 2px solid #2F4F3E; outline-offset: 2px; } .ds-btn-primary:active { transform: translateY(1px); }"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Supporting action. Beige Card fill with 1px Chalk border. Flat, no shadow.",
+      "html": "<button class=\"ds-btn-secondary\">Log ind</button>",
+      "css": ".ds-btn-secondary { background: #EFEDE7; color: #1F2A24; font-family: 'DM Sans', system-ui, sans-serif; font-size: 13.5px; font-weight: 500; padding: 9px 20px; border: 1px solid #E0DDD5; border-radius: 10px; cursor: pointer; transition: background 150ms cubic-bezier(0.165,0.84,0.44,1), border-color 150ms cubic-bezier(0.165,0.84,0.44,1); } .ds-btn-secondary:hover { background: #E6E2DA; border-color: #CFCBC1; } .ds-btn-secondary:focus-visible { outline: 2px solid #2F4F3E; outline-offset: 2px; }"
+    },
+    {
+      "name": "Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Default surface card. Beige Card fill on Linen page, 14px radius, no shadow, no border.",
+      "html": "<div class=\"ds-card\"><div class=\"ds-card-title\">Maria L., Café Nord</div><div class=\"ds-card-body\">Svarly sparer mig så meget tid. Nu får alle anmeldelser et svar, og vores kunder lægger mærke til det.</div></div>",
+      "css": ".ds-card { background: #EFEDE7; color: #1F2A24; border-radius: 14px; padding: 22px 24px; display: flex; flex-direction: column; gap: 10px; max-width: 360px; } .ds-card-title { font-family: 'DM Sans', system-ui, sans-serif; font-size: 14px; font-weight: 500; color: #5C6B62; letter-spacing: normal; } .ds-card-body { font-family: 'DM Sans', system-ui, sans-serif; font-size: 16px; font-weight: 400; line-height: 1.6; color: #1F2A24; }"
+    },
+    {
+      "name": "Text Input",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Single-line text input. Linen fill, 1px Chalk border, focus deepens border to Deep Forest.",
+      "html": "<label class=\"ds-input-wrap\"><span class=\"ds-input-label\">E-mail</span><input class=\"ds-input\" type=\"email\" placeholder=\"navn@virksomhed.dk\" /></label>",
+      "css": ".ds-input-wrap { display: flex; flex-direction: column; gap: 6px; max-width: 320px; } .ds-input-label { font-family: 'DM Sans', system-ui, sans-serif; font-size: 13.5px; font-weight: 500; color: #1F2A24; } .ds-input { background: #F8F9F7; color: #1F2A24; font-family: 'DM Sans', system-ui, sans-serif; font-size: 16px; line-height: 1.4; padding: 10px 12px; border: 1px solid #E0DDD5; border-radius: 10px; outline: none; transition: border-color 150ms cubic-bezier(0.165,0.84,0.44,1); } .ds-input::placeholder { color: #5C6B62; } .ds-input:focus { border-color: #2F4F3E; } .ds-input:focus-visible { outline: 2px solid #2F4F3E; outline-offset: 2px; }"
+    },
+    {
+      "name": "Pill Badge",
+      "kind": "chip",
+      "refersTo": "pill-badge",
+      "description": "Signature small element. Beige Card fill, 1px Chalk border, leading 18px circular accent shape, fully rounded. Used as category label.",
+      "html": "<span class=\"ds-pill\"><span class=\"ds-pill-dot\"><svg width=\"9\" height=\"9\" viewBox=\"0 0 10 10\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M2 5h2l1.5-3L7 8l1.5-3H11\" stroke=\"#2F4F3E\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg></span>AI til anmeldelsessvar</span>",
+      "css": ".ds-pill { display: inline-flex; align-items: center; gap: 7px; background: #EFEDE7; border: 1px solid #E0DDD5; color: #5C6B62; font-family: 'DM Sans', system-ui, sans-serif; font-size: 11.5px; font-weight: 500; letter-spacing: normal; padding: 5px 14px 5px 8px; border-radius: 9999px; } .ds-pill-dot { display: inline-flex; width: 18px; height: 18px; align-items: center; justify-content: center; background: rgba(47,79,62,0.094); border-radius: 9999px; }"
+    },
+    {
+      "name": "Nav Link",
+      "kind": "nav",
+      "refersTo": "nav-link",
+      "description": "Marketing top-nav link. Bark when inactive, Deep Forest with 1.5px solid bottom border when active.",
+      "html": "<nav class=\"ds-nav\"><a class=\"ds-nav-link\" href=\"#\">Funktioner</a><a class=\"ds-nav-link is-active\" href=\"#\">Priser</a><a class=\"ds-nav-link\" href=\"#\">Om os</a></nav>",
+      "css": ".ds-nav { display: inline-flex; gap: 24px; align-items: center; } .ds-nav-link { font-family: 'DM Sans', system-ui, sans-serif; font-size: 13.5px; font-weight: 400; color: #5C6B62; padding-bottom: 1px; border-bottom: 1.5px solid transparent; text-decoration: none; transition: color 150ms cubic-bezier(0.165,0.84,0.44,1); } .ds-nav-link:hover { color: #1F2A24; } .ds-nav-link.is-active { color: #2F4F3E; font-weight: 500; border-bottom-color: #2F4F3E; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Office Above the Café",
+    "overview": "Imagine a small office on the floor above a Copenhagen café. There is morning light from a back window, a plant in the corner, paper notebooks on the desk, and a kettle. Things are practical, warm, lived-in. Nobody is performing. The work gets done, and then the owner goes back downstairs to greet customers. That is the room Svarly lives in.\n\nThe system is calm by default. Color is committed (one deep forest green carries the brand identity), but it is held against warm-neutral surfaces (off-white linen, beige cards) so the green never dominates. Type is split: a serif display for headlines (DM Serif Display, regular) carries the editorial character; a sans (DM Sans) carries everything else, with deliberately generous body sizes for older readers. Depth is mostly absent. A few key elements (the primary CTA, hover affordances) carry a soft warm-tinted shadow that reads as ambient daylight, not Material elevation.\n\nThis is explicitly NOT a Silicon Valley SaaS, NOT a generic AI tool, NOT a 2010s SMB plugin, and NOT enterprise software.",
+    "keyCharacteristics": [
+      "One forest-green primary, used sparingly on identity and CTA",
+      "Warm-neutral surfaces (linen + beige) instead of pure white or grey",
+      "DM Serif Display for headlines, occasional italics for emphasis",
+      "Body type 16px+, line-height 1.6, AAA contrast on default text",
+      "Flat by default, soft ambient shadow only on the primary CTA and hover",
+      "Slightly larger radii (10px on controls, 14px on cards) for a hospitable feel",
+      "Pill badges with 1px border on beige fill as the signature small element"
+    ],
+    "rules": [
+      { "name": "The One Green Rule", "body": "Deep Forest appears on no more than 10 to 15 percent of any screen. Its rarity is the brand. If a layout has more than one green CTA visible at once, one of them is wrong.", "section": "colors" },
+      { "name": "The No-White, No-Black Rule", "body": "Pure white (#fff) and pure black (#000) are forbidden. Backgrounds use Linen or Beige Card. Text uses Ink. Both are tinted toward the brand hue family on purpose.", "section": "colors" },
+      { "name": "The Bark-Is-Supporting Rule", "body": "Bark (#5C6B62) is for muted, secondary, or inactive copy only. Default body text is always Ink. AAA contrast on body text is non-negotiable for this audience.", "section": "colors" },
+      { "name": "The Italic-As-Emphasis Rule", "body": "Inside DM Serif Display headlines, italic is the brand's stress mark. Sans copy never uses italic for emphasis: weight does that work. No bold-and-italic anywhere.", "section": "typography" },
+      { "name": "The 16-Pixel Floor Rule", "body": "Body copy never goes below 16px on marketing surfaces, never below 14px in product UI, never below 13.5px for any reader-facing label.", "section": "typography" },
+      { "name": "The One-Headline-Per-Hero Rule", "body": "A single DM Serif Display block per major surface. Don't stack three serif headlines in a hero; don't use the display face for sub-headers.", "section": "typography" },
+      { "name": "The Flat-Surface Rule", "body": "Cards, inputs, badges, sections, and the page itself never carry shadows. Depth between surfaces is tonal: Beige Card lifts from Linen because they are different colors, not because one is shadowed.", "section": "elevation" },
+      { "name": "The Daylight-Not-Material Rule", "body": "When a shadow is used, it is warm (tinted toward Deep Forest), low in opacity, and large in blur. It reads as the soft glow of ambient light. It does not read as a Material card lifted off a substrate.", "section": "elevation" },
+      { "name": "The Two-Roles Rule", "body": "Shadow is reserved for (1) the primary CTA at rest and (2) hover or focus affordances. Never for cards, never for hero containers, never for navigation, never for modals.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do use Deep Forest (#2F4F3E) on roughly 10 to 15 percent of any screen, concentrated on identity (logo, primary CTA, active nav).",
+      "Do use Linen (#F8F9F7) and Beige Card (#EFEDE7) as the only two surface colors. Alternate sections to create rhythm.",
+      "Do use DM Serif Display, regular weight, with occasional italic, for hero and section headlines. One serif headline per major surface.",
+      "Do keep body text at 16px or larger with line-height 1.6. AAA contrast on body. Larger touch targets on mobile (44px minimum).",
+      "Do use shadow only on the primary CTA at rest and on hover affordances. Warm-tinted, low opacity, large blur.",
+      "Do treat depth tonally: Beige Card lifts from Linen because of color, not shadow.",
+      "Do use 1px Chalk Border (#E0DDD5) for input strokes, dividers, and the scrolled nav bottom edge.",
+      "Do keep copy plainspoken: direct, warm, slightly understated. Sentences end with periods.",
+      "Do use the pill badge as the signature small element for category labels."
+    ],
+    "donts": [
+      "Don't use pure black (#000) or pure white (#fff) anywhere. Tint toward the brand hue.",
+      "Don't add shadows to cards, sections, modals, navigation, or hero containers. The system is flat.",
+      "Don't use border-left greater than 1px as a colored accent stripe. No side stripes on cards, callouts, or list items.",
+      "Don't apply background-clip: text with a gradient. Gradient text is forbidden. Emphasis comes from weight or italic.",
+      "Don't use glassmorphism on cards or panels. The transparent-blurred nav is the only blur permitted; one blur per screen.",
+      "Don't stack a serif headline on top of another serif headline. One DM Serif Display block per surface.",
+      "Don't use 13 to 14px text as body copy. That weight is for labels and nav links only.",
+      "Don't ship a 'generic AI tool' surface: no purple gradients, no sparkle icons, no 'AI' badges, no robot imagery, no 'Powered by GPT' anywhere.",
+      "Don't ship a 'Silicon Valley SaaS' surface: no navy-and-gradient hero, no glassmorphism cards, no rainbow accent stripes, no big-number metric grids.",
+      "Don't ship 'cheap SMB tooling': no clipart, no neon CTAs, no cluttered dashboards, no 2010s WordPress-plugin energy.",
+      "Don't ship 'over-corporate enterprise': no stock photography of suits, no jargon, no LinkedIn-shaped seriousness, no Salesforce-shaped density.",
+      "Don't use exclamation marks in UI copy. Plainspoken Danish does not shout.",
+      "Don't use em dashes in copy. Use commas, colons, periods, or parentheses.",
+      "Don't use English where Danish works. The product ships in Danish; copy is Danish."
+    ]
+  }
+}

@@ -25,10 +25,7 @@ export default function SignUpPage() {
           </span>
         </Link>
 
-        <div
-          className="rounded-[18px] border border-[#E0DDD5] bg-white px-8 py-9"
-          style={{ boxShadow: "0 4px 32px rgba(0,0,0,0.08)" }}
-        >
+        <div className="rounded-[18px] bg-card px-8 py-9">
           <h1 className="mb-1.5 text-center text-[22px] font-semibold tracking-[-0.4px] text-[#1F2A24]">
             Opret din konto
           </h1>

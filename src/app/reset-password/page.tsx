@@ -7,8 +7,6 @@ import Image from "next/image";
 import { Eye, EyeOff } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 
-const PRIMARY = "#2F4F3E";
-const BORDER = "#E0DDD5";
 const MUTED = "#5C6B62";
 
 export default function ResetPasswordPage() {
@@ -58,10 +56,7 @@ export default function ResetPasswordPage() {
           </span>
         </Link>
 
-        <div
-          className="rounded-[18px] border border-[#E0DDD5] bg-white px-8 py-9"
-          style={{ boxShadow: "0 4px 32px rgba(0,0,0,0.08)" }}
-        >
+        <div className="rounded-[18px] bg-card px-8 py-9">
           <h1 className="mb-1.5 text-center text-[22px] font-semibold tracking-[-0.4px] text-[#1F2A24]">
             Ny adgangskode
           </h1>
@@ -71,7 +66,7 @@ export default function ResetPasswordPage() {
 
           <form onSubmit={onSubmit} className="space-y-3.5">
             <div>
-              <label htmlFor="password" className="mb-1.5 block text-[12.5px] font-medium text-[#1F2A24]">
+              <label htmlFor="password" className="mb-1.5 block text-[13.5px] font-medium text-[#1F2A24]">
                 Ny adgangskode
               </label>
               <div className="relative">
@@ -84,8 +79,7 @@ export default function ResetPasswordPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Mindst 6 tegn"
-                  className="w-full h-[42px] rounded-[10px] bg-[#FAFAF8] px-[13px] pr-10 text-[14px] text-[#1F2A24] outline-none transition-colors focus:border-[#2F4F3E]"
-                  style={{ border: `1px solid ${BORDER}` }}
+                  className="w-full h-[42px] rounded-[10px] border border-[#E0DDD5] bg-[#F8F9F7] px-[13px] pr-10 text-[16px] text-[#1F2A24] outline-none transition-colors focus:border-[#2F4F3E]"
                 />
                 <button
                   type="button"
@@ -107,11 +101,7 @@ export default function ResetPasswordPage() {
             <button
               type="submit"
               disabled={loading}
-              className="h-11 w-full rounded-[11px] text-[14.5px] font-semibold text-white transition-opacity disabled:opacity-75"
-              style={{
-                background: `linear-gradient(135deg, ${PRIMARY}, ${PRIMARY}dd)`,
-                boxShadow: `0 3px 14px ${PRIMARY}45`,
-              }}
+              className="h-11 w-full rounded-[11px] bg-primary text-[14.5px] font-medium text-primary-foreground shadow-[0_2px_12px_rgba(47,79,62,0.35)] transition-all hover:bg-[#25402F] hover:shadow-[0_4px_18px_rgba(47,79,62,0.18)] disabled:pointer-events-none disabled:opacity-60"
             >
               {loading ? "Gemmer…" : "Gem ny adgangskode"}
             </button>
