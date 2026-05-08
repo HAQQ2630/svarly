@@ -1,9 +1,9 @@
 import { Suspense } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { SignInForm } from "@/components/sign-in-form";
+import { SignUpForm } from "@/components/sign-up-form";
 
-export default function LoginPage() {
+export default function SignUpPage() {
   return (
     <div className="relative flex min-h-screen items-center justify-center bg-[#F8F9F7] px-6 py-20">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(47,79,62,0.10),transparent_65%)]" />
@@ -30,24 +30,24 @@ export default function LoginPage() {
           style={{ boxShadow: "0 4px 32px rgba(0,0,0,0.08)" }}
         >
           <h1 className="mb-1.5 text-center text-[22px] font-semibold tracking-[-0.4px] text-[#1F2A24]">
-            Velkommen tilbage
+            Opret din konto
           </h1>
           <p className="mb-7 text-center text-[14px] text-[#5C6B62]">
-            Log ind for at administrere dine anmeldelser
+            Gratis i 14 dage. Intet kreditkort.
           </p>
 
           <Suspense fallback={null}>
-            <SignInForm />
+            <SignUpForm />
           </Suspense>
         </div>
 
         <p className="mt-5 text-center text-[13px] text-[#5C6B62]">
-          Har du ikke en konto?{" "}
+          Har du allerede en konto?{" "}
           <Link
-            href="/signup"
+            href="/login"
             className="font-medium text-[#2F4F3E] hover:underline"
           >
-            Opret gratis
+            Log ind
           </Link>
         </p>
       </div>

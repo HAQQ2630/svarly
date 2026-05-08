@@ -2,6 +2,7 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
 const PROTECTED_PREFIXES = ["/dashboard", "/reviews", "/settings"];
+const AUTH_PAGES = ["/login", "/signup"];
 
 export async function updateSession(request: NextRequest) {
   let response = NextResponse.next({ request });
@@ -32,8 +33,12 @@ export async function updateSession(request: NextRequest) {
   } = await supabase.auth.getUser();
 
   const { pathname } = request.nextUrl;
+
   const isProtected = PROTECTED_PREFIXES.some(
     (prefix) => pathname === prefix || pathname.startsWith(prefix + "/"),
+  );
+  const isAuthPage = AUTH_PAGES.some(
+    (p) => pathname === p || pathname.startsWith(p + "/"),
   );
 
   if (!user && isProtected) {
@@ -41,6 +46,10 @@ export async function updateSession(request: NextRequest) {
     url.pathname = "/login";
     url.searchParams.set("redirectedFrom", pathname);
     return NextResponse.redirect(url);
+  }
+
+  if (user && isAuthPage) {
+    return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 
   return response;

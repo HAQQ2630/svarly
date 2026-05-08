@@ -1,8 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Eye, EyeOff } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { GoogleLogo } from "@/components/landing/icons";
@@ -11,24 +10,14 @@ const PRIMARY = "#2F4F3E";
 const BORDER = "#E0DDD5";
 const MUTED = "#5C6B62";
 
-function safeRedirect(value: string | null): string {
-  if (!value) return "/dashboard";
-  if (!value.startsWith("/") || value.startsWith("//") || value.startsWith("/\\")) {
-    return "/dashboard";
-  }
-  return value;
-}
-
-export function SignInForm() {
+export function SignUpForm() {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const redirectTo = safeRedirect(searchParams.get("redirectedFrom"));
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [remember, setRemember] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [checkEmail, setCheckEmail] = useState(false);
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -36,19 +25,19 @@ export function SignInForm() {
     setLoading(true);
     try {
       const supabase = createClient();
-      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      const { data, error } = await supabase.auth.signUp({ email, password });
       if (error) {
         setError(error.message);
         return;
       }
-      router.push(redirectTo);
-      router.refresh();
+      if (data.session) {
+        router.push("/dashboard");
+        router.refresh();
+      } else {
+        setCheckEmail(true);
+      }
     } catch (err) {
-      setError(
-        err instanceof Error
-          ? err.message
-          : "Kunne ikke kontakte Supabase. Tjek NEXT_PUBLIC_SUPABASE_URL.",
-      );
+      setError(err instanceof Error ? err.message : "Noget gik galt.");
     } finally {
       setLoading(false);
     }
@@ -59,28 +48,36 @@ export function SignInForm() {
     setLoading(true);
     try {
       const supabase = createClient();
-      const next = encodeURIComponent(redirectTo);
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
-          redirectTo: `${window.location.origin}/auth/callback?next=${next}`,
+          redirectTo: `${window.location.origin}/auth/callback?next=/dashboard`,
         },
       });
       if (error) {
         setError(error.message);
         setLoading(false);
       }
-      // On success, Supabase redirects the browser; no further work here.
     } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "Kunne ikke starte Google-login.",
-      );
+      setError(err instanceof Error ? err.message : "Kunne ikke starte Google-login.");
       setLoading(false);
     }
   }
 
   const inputBase =
     "w-full h-[42px] rounded-[10px] bg-[#FAFAF8] px-[13px] text-[14px] text-[#1F2A24] outline-none transition-colors focus:border-[#2F4F3E]";
+
+  if (checkEmail) {
+    return (
+      <div className="rounded-[12px] border border-emerald-200 bg-emerald-50 px-5 py-6 text-center">
+        <div className="text-2xl mb-3">📬</div>
+        <p className="text-[14px] font-semibold text-[#1F2A24] mb-1">Tjek din e-mail</p>
+        <p className="text-[13px]" style={{ color: MUTED }}>
+          Vi har sendt et bekræftelseslink til <strong>{email}</strong>. Klik på linket for at aktivere din konto.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -110,11 +107,12 @@ export function SignInForm() {
             <input
               id="password"
               type={showPassword ? "text" : "password"}
-              autoComplete="current-password"
+              autoComplete="new-password"
               required
+              minLength={6}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="••••••••"
+              placeholder="Mindst 6 tegn"
               className={`${inputBase} pr-10`}
               style={{ border: `1px solid ${BORDER}` }}
             />
@@ -127,22 +125,6 @@ export function SignInForm() {
               {showPassword ? <EyeOff size={15} /> : <Eye size={15} />}
             </button>
           </div>
-        </div>
-
-        <div className="flex items-center justify-between pt-1">
-          <label className="flex cursor-pointer items-center gap-1.5 text-[12.5px] text-[#5C6B62]">
-            <input
-              type="checkbox"
-              checked={remember}
-              onChange={(e) => setRemember(e.target.checked)}
-              className="h-3.5 w-3.5"
-              style={{ accentColor: PRIMARY }}
-            />
-            Husk mig
-          </label>
-          <Link href="/forgot-password" className="text-[12.5px] font-medium text-[#2F4F3E] hover:underline">
-            Glemt adgangskode?
-          </Link>
         </div>
 
         {error && (
@@ -160,7 +142,7 @@ export function SignInForm() {
             boxShadow: `0 3px 14px ${PRIMARY}45`,
           }}
         >
-          {loading ? "Logger ind…" : "Log ind"}
+          {loading ? "Opretter konto…" : "Opret konto gratis"}
         </button>
       </form>
 
@@ -178,7 +160,7 @@ export function SignInForm() {
         style={{ border: `1.5px solid ${BORDER}` }}
       >
         <GoogleLogo />
-        Log ind med Google
+        Opret med Google
       </button>
     </>
   );

@@ -183,9 +183,7 @@ export function ReviewItem({ review: initial }: { review: Review }) {
               </>
             )}
             {review.status === "replied" && (
-              <Button size="sm" variant="outline">
-                Vis på {platformLabel[review.platform]}
-              </Button>
+              <span className="text-xs" style={{ color: "#5C6B62" }}>Svar sendt ✓</span>
             )}
           </div>
         </div>

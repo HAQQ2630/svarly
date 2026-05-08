@@ -377,7 +377,7 @@ export default function HomePage() {
           <h2 className="leading-[1.2] tracking-[-0.4px] mb-3" style={{ fontFamily: "var(--font-dm-serif),serif", fontWeight: 400, fontSize: "clamp(24px,3.2vw,38px)" }}>
             Ét abonnement. Alt inkluderet.
           </h2>
-          <p className="text-[15px] mb-8" style={{ color: MUTED }}>149 DKK / måned. Start gratis i 14 dage.</p>
+          <p className="text-[15px] mb-8" style={{ color: MUTED }}>Fra gratis. Starter fra 199 DKK/måned.</p>
           <Link
             href="/priser"
             className="inline-block px-8 py-[13px] rounded-[12px] text-[15px] font-semibold text-white transition-all hover:opacity-90"
