@@ -1,6 +1,7 @@
 import { Sidebar } from "@/components/sidebar";
 import { AppTopbar } from "@/components/app-topbar";
 import { MobileNav } from "@/components/mobile-nav";
+import { TopProgress } from "@/components/top-progress";
 import { getCurrentBusiness, getReviewStats } from "@/lib/queries";
 
 export default async function AppLayout({
@@ -16,6 +17,7 @@ export default async function AppLayout({
 
   return (
     <div className="flex min-h-screen bg-[#F8F9F7] text-[#1F2A24]">
+      <TopProgress />
       <Sidebar pendingCount={pendingCount} />
       <main className="flex-1 overflow-x-hidden pb-[88px] md:pb-0">
         <AppTopbar pendingCount={pendingCount} businessName={business?.name ?? null} />

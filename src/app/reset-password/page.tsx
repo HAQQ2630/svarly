@@ -6,6 +6,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Eye, EyeOff } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
+import { Spinner } from "@/components/spinner";
 
 const MUTED = "#5C6B62";
 
@@ -101,9 +102,16 @@ export default function ResetPasswordPage() {
             <button
               type="submit"
               disabled={loading}
-              className="h-11 w-full rounded-[11px] bg-primary text-[14.5px] font-medium text-primary-foreground shadow-[0_2px_12px_rgba(47,79,62,0.35)] transition-all hover:bg-[#25402F] hover:shadow-[0_4px_18px_rgba(47,79,62,0.18)] disabled:pointer-events-none disabled:opacity-60"
+              className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-[11px] bg-primary text-[14.5px] font-medium text-primary-foreground shadow-[0_2px_12px_rgba(47,79,62,0.35)] transition-all hover:bg-[#25402F] hover:shadow-[0_4px_18px_rgba(47,79,62,0.18)] disabled:pointer-events-none disabled:opacity-60"
             >
-              {loading ? "Gemmer…" : "Gem ny adgangskode"}
+              {loading ? (
+                <>
+                  <Spinner />
+                  Gemmer…
+                </>
+              ) : (
+                "Gem ny adgangskode"
+              )}
             </button>
           </form>
         </div>
