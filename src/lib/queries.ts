@@ -7,6 +7,7 @@ type BusinessRow = {
   name: string;
   signature: string | null;
   brand_voice: string | null;
+  google_location_name: string | null;
 };
 
 type ReviewRow = {
@@ -29,6 +30,7 @@ function mapBusiness(row: BusinessRow): Business {
     name: row.name,
     signature: row.signature,
     brandVoice: row.brand_voice,
+    googleLocationName: row.google_location_name,
   };
 }
 
@@ -58,7 +60,7 @@ export async function getCurrentBusiness(): Promise<Business | null> {
 
   const { data, error } = await supabase
     .from("businesses")
-    .select("id, name, signature, brand_voice")
+    .select("id, name, signature, brand_voice, google_location_name")
     .eq("owner_user_id", user.id)
     .order("created_at", { ascending: true })
     .limit(1)

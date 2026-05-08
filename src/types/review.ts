@@ -27,4 +27,5 @@ export interface Business {
   name: string;
   signature: string | null;
   brandVoice: string | null;
+  googleLocationName: string | null;
 }
