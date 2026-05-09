@@ -48,13 +48,53 @@ export async function getValidAccessToken(
 
 // ─── GBP API helpers ─────────────────────────────────────────────────────────
 
+export type GbpErrorCode =
+  | "quota_exhausted"
+  | "unauthorized"
+  | "forbidden"
+  | "server_error"
+  | "unknown";
+
+export class GbpApiError extends Error {
+  readonly status: number;
+  readonly code: GbpErrorCode;
+  readonly body: unknown;
+
+  constructor(status: number, body: unknown) {
+    super(`GBP request failed (${status})`);
+    this.name = "GbpApiError";
+    this.status = status;
+    this.body = body;
+    this.code = deriveGbpErrorCode(status, body);
+  }
+}
+
+function deriveGbpErrorCode(status: number, body: unknown): GbpErrorCode {
+  if (status === 429) return "quota_exhausted";
+  if (status === 401) return "unauthorized";
+  if (status === 403) {
+    // 403 with RESOURCE_EXHAUSTED inside is also a quota issue.
+    const reasonStr = JSON.stringify(body ?? "");
+    if (reasonStr.includes("RESOURCE_EXHAUSTED")) return "quota_exhausted";
+    return "forbidden";
+  }
+  if (status >= 500) return "server_error";
+  return "unknown";
+}
+
 async function gbpFetch(accessToken: string, url: string) {
   const res = await fetch(url, {
     headers: { Authorization: `Bearer ${accessToken}` },
   });
   if (!res.ok) {
-    const body = await res.text();
-    throw new Error(`GBP API error ${res.status}: ${body}`);
+    const text = await res.text();
+    let parsed: unknown = text;
+    try {
+      parsed = JSON.parse(text);
+    } catch {
+      // body wasn't JSON, keep as text
+    }
+    throw new GbpApiError(res.status, parsed);
   }
   return res.json();
 }
