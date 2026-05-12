@@ -47,6 +47,16 @@ export default function LoginPage() {
             Opret gratis
           </Link>
         </p>
+
+        <p className="mt-3 text-center text-[11.5px] text-[#5C6B62]">
+          <Link href="/privacy" className="hover:underline">
+            Privatlivspolitik
+          </Link>
+          {" · "}
+          <Link href="/vilkaar" className="hover:underline">
+            Vilkår
+          </Link>
+        </p>
       </div>
     </div>
   );

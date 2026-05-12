@@ -68,9 +68,39 @@ export function LandingFooter() {
           className="flex flex-col-reverse md:flex-row md:justify-between md:items-center gap-4 pt-6"
           style={{ borderTop: "1px solid rgba(255,255,255,0.08)" }}
         >
-          <span className="text-[11.5px]" style={{ color: "rgba(255,255,255,0.25)" }}>
-            © 2025 Svarly. Alle rettigheder forbeholdes.
-          </span>
+          <div className="flex flex-col gap-2 text-[11.5px] md:flex-row md:items-center md:gap-3">
+            <span style={{ color: "rgba(255,255,255,0.25)" }}>
+              © 2026 Svarly. Alle rettigheder forbeholdes.
+            </span>
+            <span
+              className="hidden md:inline"
+              style={{ color: "rgba(255,255,255,0.18)" }}
+              aria-hidden
+            >
+              ·
+            </span>
+            <Link
+              href="/privacy"
+              className="transition-colors hover:text-white"
+              style={{ color: "rgba(255,255,255,0.55)" }}
+            >
+              Privatlivspolitik
+            </Link>
+            <span
+              className="hidden md:inline"
+              style={{ color: "rgba(255,255,255,0.18)" }}
+              aria-hidden
+            >
+              ·
+            </span>
+            <Link
+              href="/vilkaar"
+              className="transition-colors hover:text-white"
+              style={{ color: "rgba(255,255,255,0.55)" }}
+            >
+              Vilkår
+            </Link>
+          </div>
           <div className="flex items-center gap-2">
             <GoogleLogo />
             <TrustpilotLogo />

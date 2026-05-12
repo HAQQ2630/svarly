@@ -115,6 +115,16 @@ export default function ResetPasswordPage() {
             </button>
           </form>
         </div>
+
+        <p className="mt-5 text-center text-[11.5px]" style={{ color: MUTED }}>
+          <Link href="/privacy" className="hover:underline">
+            Privatlivspolitik
+          </Link>
+          {" · "}
+          <Link href="/vilkaar" className="hover:underline">
+            Vilkår
+          </Link>
+        </p>
       </div>
     </div>
   );
